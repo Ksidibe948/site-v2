@@ -33,6 +33,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=CessionImmoIncorporelle&id='.$doonnees['id']);
+    header('Location:index.php?page=CessionImmoIncorporelle&id='.$doonnees['id']);
  }
 ?>

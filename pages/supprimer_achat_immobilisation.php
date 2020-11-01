@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=achat_immobilisation&id='.$getid);
+    header('Location:index.php?page=achat_immobilisation&id='.$getid);
  }
 ?>

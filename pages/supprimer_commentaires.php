@@ -9,7 +9,7 @@
      $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
      $supprimer=$bdd->prepare('DELETE FROM commentaires WHERE id=?');
      $supprimer->execute(array($getid));
-     header("Location:visteurs.php?page=publications_and_commentaires&id_publications=".$id_pu."&id=".$getid);
+     header("Location:index.php?page=publications_and_commentaires&id_publications=".$id_pu."&id=".$getid);
  }
 
 ?>

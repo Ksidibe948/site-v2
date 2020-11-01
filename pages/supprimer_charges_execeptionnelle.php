@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=charges_execeptionnels&id='.$getid);
+    header('Location:index.php?page=charges_execeptionnels&id='.$getid);
  }
 ?>

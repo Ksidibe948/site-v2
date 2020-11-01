@@ -26,7 +26,7 @@
          $reqS=$bdd->prepare('DELETE  FROM StocksimmoCorporelle WHERE id=?');
          $reqS->execute(array($getid));
     }
-    header('Location:visteurs.php?page=AchatsImmobilisationsCorporelles&id='.$getid);
+    header('Location:index.php?page=AchatsImmobilisationsCorporelles&id='.$getid);
  }
 ?>
 

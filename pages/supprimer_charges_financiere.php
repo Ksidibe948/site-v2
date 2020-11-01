@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=charges_financiers&id='.$getid);
+    header('Location:index.php?page=charges_financiers&id='.$getid);
  }
 ?>

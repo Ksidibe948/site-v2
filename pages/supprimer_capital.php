@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=capital&id='.$_SESSION['id']);
+    header('Location:index.php?page=capital&id='.$_SESSION['id']);
  }
 ?>

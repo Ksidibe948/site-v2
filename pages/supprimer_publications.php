@@ -40,6 +40,6 @@
         
 
     }
-    header('Location:visteurs.php?page=donnees_utilisateurs&id='.$_SESSION['id']);
+    header('Location:index.php?page=donnees_utilisateurs&id='.$_SESSION['id']);
  }
 ?>

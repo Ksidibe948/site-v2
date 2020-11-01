@@ -26,7 +26,7 @@
                 $_SESSION['nom']=$info['nom'];
                 $_SESSION['images']=$info['images'];
                 $_SESSION['date']=$info['date'];
-                header('Location:visteurs.php?page=utilisateurs&id='.$_SESSION['id']);
+                header('Location:index.php?page=utilisateurs&id='.$_SESSION['id']);
             } else {
                 $error3='Vos mot de passes ne se correspondent pas!';
             }
@@ -59,7 +59,7 @@
              $_SESSION['password']=$donnees['password'];
              $_SESSION['images']=$donnees['images'];
              $_SESSION['date']=$donnees['date'];
-             header('Location:visteurs.php?page=utilisateurs&id='.$_SESSION['id']);
+             header('Location:index.php?page=utilisateurs&id='.$_SESSION['id']);
            } else {
                $error5='Mauvais compte ou mauvais mot de passe!';
            }

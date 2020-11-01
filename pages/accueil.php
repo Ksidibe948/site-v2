@@ -28,14 +28,14 @@
         <div class="collapse navbar-collapse" id="navbar">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active mr-">
-              <a class="nav-link" href="visteurs.php?page=accueil">Accueil <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="index.php?page=accueil">Accueil <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item mr">
-              <a class="nav-link" href="visteurs.php?page=blogs">blogs
+              <a class="nav-link" href="index.php?page=blogs">blogs
                 </a>
             </li>
             <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="visteurs.php?page=cours" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="index.php?page=cours" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Cours
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -47,14 +47,14 @@
             </div>
           </li>
           </ul>
-          <a class="nav-link" href="visteurs.php?page=connexion"> 
+          <a class="nav-link" href="index.php?page=connexion"> 
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-plus-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
             <path fill-rule="evenodd" d="M13 7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
             </svg>
               Créer un compte
           </a>
-          <a class="nav-link" href="visteurs.php?page=connexion"> 
+          <a class="nav-link" href="index.php?page=connexion"> 
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                 </svg>

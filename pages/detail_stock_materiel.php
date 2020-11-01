@@ -76,10 +76,10 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav ml-5 ">
       <li class="nav-item ">
-      <a class="nav-link" href="visteurs.php?page=utilisateurs"> Publications <span class="sr-only">(current)</span></a>
+      <a class="nav-link" href="index.php?page=utilisateurs"> Publications <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active ">
-      <a class="nav-link  " href="visteurs.php?page=comptabilite&id=<?=$_SESSION['id'] ?>">Comptabilité</a>
+      <a class="nav-link  " href="index.php?page=comptabilite&id=<?=$_SESSION['id'] ?>">Comptabilité</a>
       </li>
       </ul>
       <ul class="navbar-nav ml-auto mr-5 ">
@@ -89,11 +89,11 @@
        <?= $_SESSION['nom']?>
         </a>
         <div class="dropdown-menu pl-2 mr-5" aria-labelledby="navbarDropdownMenuLink">
-        <a class="nav-link " href="visteurs.php?page=donnees_utilisateurs&id=<?=$_SESSION['id'] ?>">Publications </a>
-        <a class="nav-link text-dark  " href="visteurs.php?page=publication&id=<?=$_SESSION['id'] ?>">Publier</a>
-        <a class="nav-link text-dark  " href="visteurs.php?page=publication&id=<?=$_SESSION['id'] ?>">Profil</a>
-        <a class="nav-link text-dark " href="visteurs.php?page=modifier_utilisateurs&id=<?=$_SESSION['id'] ?>"> Modifier  profil</a>
-        <a class="nav-link text-dark " href="visteurs.php?page=deconnexion"> 
+        <a class="nav-link " href="index.php?page=donnees_utilisateurs&id=<?=$_SESSION['id'] ?>">Publications </a>
+        <a class="nav-link text-dark  " href="index.php?page=publication&id=<?=$_SESSION['id'] ?>">Publier</a>
+        <a class="nav-link text-dark  " href="index.php?page=publication&id=<?=$_SESSION['id'] ?>">Profil</a>
+        <a class="nav-link text-dark " href="index.php?page=modifier_utilisateurs&id=<?=$_SESSION['id'] ?>"> Modifier  profil</a>
+        <a class="nav-link text-dark " href="index.php?page=deconnexion"> 
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder-symlink-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2l.04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3zM2.19 3c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293L7.586 3H2.19zm9.608 5.271l-3.182 1.97c-.27.166-.616-.036-.616-.372V9.1s-2.571-.3-4 2.4c.571-4.8 3.143-4.8 4-4.8v-.769c0-.336.346-.538.616-.371l3.182 1.969c.27.166.27.576 0 .742z"/>
         </svg> Déconnexion</a>
@@ -108,12 +108,12 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
      <ul  class="navbar-nav mr-auto mt-2 mb-5 mt-lg-0">
       <li class="nav-item ">
-      <a class="nav-link " href="visteurs.php?page=utilisateurs"><i class="fas fa-globe-africa"></i> Publications <span class="sr-only">(current)</span></a>
-      <a class="nav-link "   href="visteurs.php?page=comptabilite&id=<?=$_SESSION['id'] ?>"><i class="fas fa-calculator"></i> Comptabilité</a>
-     <a  class="nav-link " href="visteurs.php?page=comptabilité_generale&id=<?=$_SESSION['id'] ?>"> <i class="fas fa-donate"></i> Comptabilités générales
+      <a class="nav-link " href="index.php?page=utilisateurs"><i class="fas fa-globe-africa"></i> Publications <span class="sr-only">(current)</span></a>
+      <a class="nav-link "   href="index.php?page=comptabilite&id=<?=$_SESSION['id'] ?>"><i class="fas fa-calculator"></i> Comptabilité</a>
+     <a  class="nav-link " href="index.php?page=comptabilité_generale&id=<?=$_SESSION['id'] ?>"> <i class="fas fa-donate"></i> Comptabilités générales
     </a>
-    <a  class="nav-link " href="visteurs.php?page=Stocks&id=<?=$_SESSION['id'] ?>"><i class="fas fa-chart-line"></i>  Stocks</a>
-    <a class="nav-link  active" style='color:#A41FDE;' style='color:green;'href="visteurs.php?page=stocks_materiels&id=<?=$_SESSION['id'] ?>"><i class="fas fa-chart-line"></i>Stocks de Materiels</a>
+    <a  class="nav-link " href="index.php?page=Stocks&id=<?=$_SESSION['id'] ?>"><i class="fas fa-chart-line"></i>  Stocks</a>
+    <a class="nav-link  active" style='color:#A41FDE;' style='color:green;'href="index.php?page=stocks_materiels&id=<?=$_SESSION['id'] ?>"><i class="fas fa-chart-line"></i>Stocks de Materiels</a>
     </li>
     </ul>
   </div>

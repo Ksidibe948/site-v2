@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=autres_produits&id='.$getid);
+    header('Location:index.php?page=autres_produits&id='.$getid);
  }
 ?>

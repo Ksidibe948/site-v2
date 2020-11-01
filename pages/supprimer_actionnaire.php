@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=actionnaires&id='.$getid);
+    header('Location:index.php?page=actionnaires&id='.$getid);
  }
 ?>

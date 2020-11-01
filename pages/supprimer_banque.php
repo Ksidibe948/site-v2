@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=banque&id='.$getid);
+    header('Location:index.php?page=banque&id='.$getid);
  }
 ?>

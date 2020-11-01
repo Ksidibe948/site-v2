@@ -27,6 +27,6 @@
          $reqs->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=AchatsImmobilisationsIncorporelles&id='.$getid);
+    header('Location:index.php?page=AchatsImmobilisationsIncorporelles&id='.$getid);
  }
 ?>

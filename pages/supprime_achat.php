@@ -28,6 +28,6 @@
          $reqS->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=achats&id='.$getid);
+    header('Location:index.php?page=achats&id='.$getid);
  }
 ?>

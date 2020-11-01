@@ -25,7 +25,7 @@
     {
         $req=$bdd->prepare('DELETE  FROM liberations WHERE id=?');
          $req->execute(array($getid));
-           header('Location:visteurs.php?page=detail_actionnaire&id='.$_GET['id_actionnaire']);
+           header('Location:index.php?page=detail_actionnaire&id='.$_GET['id_actionnaire']);
 
     }
   

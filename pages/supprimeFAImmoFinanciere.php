@@ -27,6 +27,6 @@
          $reqs->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=AchatsImmobilisationsFinancières&id='.$getid);
+    header('Location:index.php?page=AchatsImmobilisationsFinancières&id='.$getid);
  }
 ?>

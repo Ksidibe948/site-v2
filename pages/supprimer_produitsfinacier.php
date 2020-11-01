@@ -25,6 +25,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=detail_produitfinancier&id='.$getid);
+    header('Location:index.php?page=detail_produitfinancier&id='.$getid);
  }
 ?>

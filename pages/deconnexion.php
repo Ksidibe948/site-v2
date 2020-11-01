@@ -2,6 +2,6 @@
  session_start();
  $_SESSION=array();
  session_destroy();
- header('Location:visteurs.php?page=connexion');
+ header('Location:index.php?page=connexion');
 
 ?>

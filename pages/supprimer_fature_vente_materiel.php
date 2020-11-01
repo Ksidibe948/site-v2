@@ -33,6 +33,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=facture_vente_materiel&id='.$doonnees['id']);
+    header('Location:index.php?page=facture_vente_materiel&id='.$doonnees['id']);
  }
 ?>

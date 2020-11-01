@@ -33,6 +33,6 @@
          $req->execute(array($getid));
 
     }
-    header('Location:visteurs.php?page=ChargesActive&id='.$doonnees['id']);
+    header('Location:index.php?page=ChargesActive&id='.$doonnees['id']);
  }
 ?>

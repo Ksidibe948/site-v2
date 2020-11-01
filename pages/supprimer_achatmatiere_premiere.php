@@ -27,6 +27,6 @@
 
 
     }
-    header('Location:visteurs.php?page=factureachatmatiere_premiere&id='.$getid);
+    header('Location:index.php?page=factureachatmatiere_premiere&id='.$getid);
  }
 ?>
