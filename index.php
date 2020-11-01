@@ -1,6 +1,6 @@
 <!-- la partie php -->
 <?php
-header('Location:pages/accueil.php');
+header('Location:pages/connexion.php');
         //   $pages=scandir('pages/');
         //   if (isset($_GET['page'])  AND !empty($_GET['page'])) 
         //   {
@@ -23,7 +23,7 @@ header('Location:pages/accueil.php');
     <title>Document</title>
 </head>
 <body>
-    <?php  include 'pages/'.$page.'.php' ?>
+ <?php // include 'pages/'.$page.'.php' ?>
     <script src="../Administration/bootstrap/jquery-3.5.1.js"></script>
     <script src="../Administration/bootstrap/bootstrap.min.js"></script>
 </body>
