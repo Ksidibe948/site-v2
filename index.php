@@ -1,17 +1,18 @@
 <!-- la partie php -->
 <?php
-          $pages=scandir('pages/');
-          if (isset($_GET['page'])  AND !empty($_GET['page'])) 
-          {
-                   if (in_array($_GET['page'].'.php' ,$pages)) {
-                      $page=$_GET['page'];
-                   } else {
-                       $page='erreurs';
-                   }
+header('Location:pages/accueil.php');
+        //   $pages=scandir('pages/');
+        //   if (isset($_GET['page'])  AND !empty($_GET['page'])) 
+        //   {
+        //            if (in_array($_GET['page'].'.php' ,$pages)) {
+        //               $page=$_GET['page'];
+        //            } else {
+        //                $page='erreurs';
+        //            }
                    
-          } else {
-              $page='accueil';
-          }
+        //   } else {
+        //       $page='accueil';
+        //   }
           
           ?>
 <!-- la partie html -->
