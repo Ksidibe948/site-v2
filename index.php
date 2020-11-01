@@ -1,18 +1,18 @@
 <!-- la partie php -->
 <?php
-header('Location:pages/connexion.php');
-        //   $pages=scandir('pages/');
-        //   if (isset($_GET['page'])  AND !empty($_GET['page'])) 
-        //   {
-        //            if (in_array($_GET['page'].'.php' ,$pages)) {
-        //               $page=$_GET['page'];
-        //            } else {
-        //                $page='erreurs';
-        //            }
+// header('Location:pages/achat.php')
+          $pages=scandir('pages/');
+          if (isset($_GET['page'])  AND !empty($_GET['page'])) 
+          {
+                   if (in_array($_GET['page'].'.php' ,$pages)) {
+                      $page=$_GET['page'];
+                   } else {
+                       $page='erreurs';
+                   }
                    
-        //   } else {
-        //       $page='accueil';
-        //   }
+          } else {
+              $page='accueil';
+          }
           
           ?>
 <!-- la partie html -->
@@ -23,7 +23,7 @@ header('Location:pages/connexion.php');
     <title>Document</title>
 </head>
 <body>
- <?php // include 'pages/'.$page.'.php' ?>
+    <?php  include 'pages/'.$page.'.php' ?>
     <script src="../Administration/bootstrap/jquery-3.5.1.js"></script>
     <script src="../Administration/bootstrap/bootstrap.min.js"></script>
 </body>
