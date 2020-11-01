@@ -1,3 +1,3 @@
 <?php
-   header('Location:visiteurs.php');
+   header('Location:pages/connexion.php');
 ?>
