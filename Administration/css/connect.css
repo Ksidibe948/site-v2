@@ -1,0 +1,36 @@
+.input1{
+  width: 250px;
+  border: solid 1px;
+}
+.input1{
+    width: 250px;
+    border-radius: 3px;
+  }
+.input1:hover{
+    width: 250px;
+    border: solid 1px #48dbfb;
+  }
+  .form-titre{
+      margin-left: 80px;
+      font-size: 1.5rem;
+      text-decoration: underline;
+  }
+  .submit{
+      margin-left: 50px;
+      width:150px;
+     
+  }
+  /* la partie connexion */
+.image{
+  position: absolute;
+}
+.submit{
+  margin-left: 100px;
+}
+.inscription{
+  border: 1px solid black;
+}
+.connexion{
+  border: 1px solid black;
+
+}
