@@ -22,6 +22,7 @@
      DATE_FORMAT(date,"%d/%m/%Y à %Hh%imin%ss") AS date
     FROM  charges_financieres where id_entreprise=?  ORDER BY id DESC');
    $select_produitsexceptionnel->execute(array($_SESSION['id']));
+   $verification= $select_produitsexceptionnel->rowcount();
    ?>
    
         
@@ -218,14 +219,6 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
  </svg>
  Charges Financier
         </a>
- <a style='font-size:1.2rem' class="nav-link text-info mb-1 shadow-sm bg-light "  href="index.php?page=nouveaucharges_financieres&id=<?=$_SESSION['id'] ?>">
-             <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-             </svg>
-  Ajouter Une Nouvelle  Charge Financière 
- </a>
-
-   
     <a style="font-size:1.3rem; " class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary " href="index.php?page=banque&id=<?=$_SESSION['id'] ?>">
      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-credit-card-2-back" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
      <path fill-rule="evenodd" d="M14 3H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
@@ -324,53 +317,75 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    </div>
    </nav>
    </div>  
-   <div class="col-lg-6 col-12">      
-          
-  <div class="card shadow-lg pl-4 pb-5 pt-5 pr-4 w-100">
+   <div class="col-lg-6 col-12">  
    <div class="row ">
-          <div class="col-12 pt-2 text-center text-light bg-secondary"style='border:solid 0.5px gray'>
-          <h1>La liste des charges financières </h1>
+    <div class="col-lg-12 mt-3 ">
+        <div class="card  w-100 shadow-lg  bg-info mb-4"  >
+        <div class="card-title text-center pt-5">
+        <a  class="nav-link text-white" href="index.php?page=nouveaucharges_financieres&id=<?=$_SESSION['id'] ?>">
+         <p style='  font-size:1.5rem'>Enregistre une nouvelle charge Financiére</p>
+         <svg width="10em" height="10em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+             </svg>
+       </a> 
         </div>
-          </div>
-   <div class="row ">
-          <div class="col-4 pt-2 text-left"style='border:solid 0.5px gray'>
-          <h5>Date</h5>
-          </div>
-          <div class="col-4 pt-2 text-center"style='border:solid 0.5px gray'>
-          <h5>Eléments</h5>  
-          </div>
-          <div class="col-4 pt-2 text-right"style='border:solid 0.5px gray'>
-           <h5>Montants</h5>
-          </div>
-          </div>
- <?php
-    while($resultat= $select_produitsexceptionnel->fetch())
-    {
-        ?>
-        <a class="link text-dark " href="index.php?page=detail_chargesfinanciere&id=<?=$resultat['id'] ?>" style='text-decoration:none'>
-          <div class="row  ">
-          <div class="col-4 pt-2 text-left"style='border:solid 0.5px gray'>
-             <?= $resultat['date'] ?>
-          </div>
-          <div class="col-4 pt-2 text-left"style='border:solid 0.5px gray'>
-          <?= $resultat['nom_operation'] ?>  
-          </div>
-          <div class="col-4 pt-2 text-right"style='border:solid 0.5px gray'>
-          <?= $resultat['montant_th'] ?>
-          </div>
-          </div>
-          </a>
-        
-        <?php
-    }
-    ?>
     </div>
     </div>
-    </div>    
-    </div> 
-    </div>
-    </div>
+    </div>  
+   <?php
+       if ( $verification>0) {
+            ?>
+             
+  <div class="card shadow-lg pl-4 pb-5 pt-5 pr-4 w-100">
+  
+  <div class="row ">
+         <div class="col-12 pt-2 text-center text-light bg-secondary"style='border:solid 0.5px gray'>
+         <h1>La liste des charges financières </h1>
+       </div>
+         </div>
+  <div class="row ">
+         <div class="col-4 pt-2 text-left"style='border:solid 0.5px gray'>
+         <h5>Date</h5>
+         </div>
+         <div class="col-4 pt-2 text-center"style='border:solid 0.5px gray'>
+         <h5>Eléments</h5>  
+         </div>
+         <div class="col-4 pt-2 text-right"style='border:solid 0.5px gray'>
+          <h5>Montants</h5>
+         </div>
+         </div>
+<?php
+   while($resultat= $select_produitsexceptionnel->fetch())
+   {
+       ?>
+       <a class="link text-dark " href="index.php?page=detail_chargesfinanciere&id=<?=$resultat['id'] ?>" style='text-decoration:none'>
+         <div class="row  ">
+         <div class="col-4 pt-2 text-left"style='border:solid 0.5px gray'>
+            <?= $resultat['date'] ?>
+         </div>
+         <div class="col-4 pt-2 text-left"style='border:solid 0.5px gray'>
+         <?= $resultat['nom_operation'] ?>  
+         </div>
+         <div class="col-4 pt-2 text-right"style='border:solid 0.5px gray'>
+         <?= $resultat['montant_th'] ?>
+         </div>
+         </div>
+         </a>
+       
+       <?php
+   }
+   ?>
+   </div>
+   </div>
+   </div>    
+   </div> 
+   </div>
+   </div>
 
+            <?php
+       }
+    ?>
+         
      </div>
     </div>
     </div>     

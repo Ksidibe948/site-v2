@@ -18,6 +18,7 @@
   }
   
 ?>
+
 <?php
    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    $select=$bdd->query('SELECT * FROM banque ORDER BY id DESC');
@@ -741,6 +742,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                               </div>
                             </div><hr>
                                         -->
+
                             <div class="form-group row">
                               <label for="inputPassword" class="col-sm-4 col-form-label">Avance   </label>
                               <div class="col-sm-3">

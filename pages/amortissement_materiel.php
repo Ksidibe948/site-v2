@@ -23,70 +23,23 @@ if (isset($_GET['id'])) {
     $getid=$_GET['id'];
 }
    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $amortissemnt_immoCoporelle=$bdd->prepare("SELECT * FROM stocksimmocorporelle
- WHERE  id=? ");
+   $amortissemnt_immoCoporelle=$bdd->prepare("SELECT * FROM AmortissementImmoCorporelle
+ WHERE  id_immobilisation=? ");
    $amortissemnt_immoCoporelle->execute(array($getid));
   $resultat= $amortissemnt_immoCoporelle->fetch();
  ?>
       <?php
          $cent='100';
-         $dureeS='';
-        $montant=$resultat['quantiteS']*$resultat['prixS'];
-        $reductions=$resultat['taux_reductionS']/100;
-        $montant_reduction=$montant*$reductions;
-        $net_commercial=$montant-$montant_reduction;
-         $EXOMPTE=$resultat['taux_exompteS']/100;
-         $montant_exompte=$net_commercial*$EXOMPTE;
-         $net_financier=$net_commercial-$montant_exompte;
-         $montant_ht=$net_financier+$resultat['montant_transportS'];
-         $TVA=$resultat['taux_tvaS']/100;
-         $montant_tva=$montant_ht*$TVA;
-         $montant_ttc=$montant_tva+$montant_ht;
-         $net_à_payer=$montant_ttc+$resultat['montant_emballageS']-$resultat['montant_avanceS'];
-         $reste=$net_à_payer-$resultat['montant_payement'];
-         $cout_acquisition= $montant_ht+$resultat['frais_accessoireS'];
+         $duree='';
+         $cout_acquisition= $resultat['cout'];
        
-        $dureeS=$resultat['dureeS'];
-        if( $dureeS > 0)
+        $duree=$resultat['duree'];
+        if( $duree > 0)
         {
-            $taux_amortissement = 100/$dureeS ;
+            $taux_amortissement = 100/$duree ;
         }else {
             $taux_amortissement = 100/1 ;
         }
-   ?>
-   
-<?php
-   $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $achamarchandises=$bdd->prepare("SELECT
-        AchatsImmoCorporelle.id,
-        AchatsImmoCorporelle.id_client,
-        AchatsImmoCorporelle. id_entreprise,
-        AchatsImmoCorporelle.marchandise,
-        AchatsImmoCorporelle.quantite,
-        AchatsImmoCorporelle.prix,
-        AchatsImmoCorporelle.reduction,
-        AchatsImmoCorporelle.taux_reduction,
-        AchatsImmoCorporelle.taux_exompte,
-        AchatsImmoCorporelle.montant_transport,
-        AchatsImmoCorporelle.taux_tva,
-        AchatsImmoCorporelle. montant_emballage,
-        AchatsImmoCorporelle. montant_avance,
-        AchatsImmoCorporelle. monyen_payement,
-        AchatsImmoCorporelle. montant_payement,
-      fournisseurs.nom,
-      fournisseurs.telephone,
-      fournisseurs. adresse,
-      fournisseurs.logo,
-        DATE_FORMAT(  AchatsImmoCorporelle.date,'%d/%m/%Y à %Hh%imin%ss') AS date
-   FROM AchatsImmoCorporelle,fournisseurs WHERE AchatsImmoCorporelle.id_client=fournisseurs.id AND AchatsImmoCorporelle. id=? ORDER BY id DESC");
-   $achamarchandises->execute(array( $_GET['id']));
-   $donnees=$achamarchandises->fetch();
- ?>
- 
-<?php
-   $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $select=$bdd->prepare('SELECT * FROM actionnaires where id_entreprise=? ORDER BY id DESC');
-   $select->execute(array($_SESSION['id']));
    ?>
 
 <?php
@@ -199,10 +152,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
      <div class="collapse navbar-collapse" id="navbarNavDropdown">
        <ul class="navbar-nav ml-5 ">
          <li class="nav-item ">
-         <a class="nav-link" href="index.php?page=utilisateurs"> Publications <span class="sr-only">(current)</span></a>
+         <a class="nav-link" href="index.php?page=utilisateurs"> <h5>Publications</h5> <span class="sr-only">(current)</span></a>
          </li>
          <li class="nav-item active ">
-         <a class="nav-link  " href="index.php?page=comptabilite&id=<?=$_SESSION['id'] ?>">Comptabilité</a>
+         <a class="nav-link  " href="index.php?page=comptabilite&id=<?=$_SESSION['id'] ?>"><h5>Comptabilité</h5></a>
          </li>
          </ul>
          <ul class="navbar-nav ml-auto mr-5 ">
@@ -240,176 +193,81 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
          </li>
        </ul>
      </div>
-   </nav>
-<div class="row">
-     <div class="col-lg-3 col-12 ">
+
+   </nav> 
+   <?php
+         if (isset($resultat['id'] )) {
+             ?>
+    <div class="row">
+     <div class="col-lg-3 col-12 pl-5  ">
      <nav class="navbar sticky-top navbar-expand-lg navbar-light ">
-     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-     <div class="overflow-auto" style='width:72%;
-       height:800px;'>
         <ul  class="navbar-nav  mr-auto ">
          <li class="nav-item ">
-         <a   class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light   " style='  font-size:1.3rem'  href="index.php?page=utilisateurs">
-         <svg width="1.3rem" height="1.3rem" viewBox="0 0 16 16" class="bi bi-globe" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"/>
-        </svg> Publications <span class="sr-only">(current)</span></a>
-         <a  class="nav-link  p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light  " style="font-size:1.3rem"  href="index.php?page=comptabilite&id=<?=$_SESSION['id'] ?>">
-         <svg width="1.3rem" height="1.3rem" viewBox="0 0 16 16" class="bi bi-calculator-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2 .5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-2zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zM4.5 9a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM4 12.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zM7.5 6a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM7 9.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm.5 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM10 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm.5 2.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-.5-.5h-1z"/>
-        </svg> Comptabilité</a>
-        <a  class="nav-link  p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light " style="font-size:1.3rem;  " href="index.php?page=comptabilité_generale&id=<?=$_SESSION['id'] ?>">
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-justify" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-         <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
-       </svg>
-      Comptabilités générales
-     </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light bg-light " style="font-size:1.3rem; "  href="index.php?page=factures&id=<?=$_SESSION['id'] ?>">              
-   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-     <path fill-rule="evenodd" d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-     <circle cx="3.5" cy="5.5" r=".5"/>
-     <circle cx="3.5" cy="8" r=".5"/>
-     <circle cx="3.5" cy="10.5" r=".5"/>
-   </svg>
-    Factures
-     </a>
-     <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light bg-light " style="font-size:1.3rem "  href="index.php?page=facturesachats&id=<?=$_SESSION['id'] ?>">              
-   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-     <path fill-rule="evenodd" d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-     <circle cx="3.5" cy="5.5" r=".5"/>
-     <circle cx="3.5" cy="8" r=".5"/>
-     <circle cx="3.5" cy="10.5" r=".5"/>
-   </svg>
-    Factures Achats
-     </a>
-     <a  class="nav-link  p-3  mb-1 shadow-sm bg-light "  style="font-size:1.2rem;color:#A41FDE" href="index.php?page=AchatsImmobilisationsCorporelles&id=<?=$_SESSION['id'] ?>"> 
-  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-   <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-   <path fill-rule="evenodd" d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-   <circle cx="3.5" cy="5.5" r=".5"/>
-   <circle cx="3.5" cy="8" r=".5"/>
-   <circle cx="3.5" cy="10.5" r=".5"/>
- </svg>
-  Achats Immobilisations Corporelles
-  </a>
-<a style="font-size:1.2rem; color:red; font-family:arial" class="nav-link p-3  mb-1 shadow-sm bg-light " href="index.php?page=amortissement_materiel&id=<?=$_GET['id'] ?>"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-graph-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5z"/>
-</svg> Tableau d'amortissement de <?=$donnees['marchandise'] ?></a>
-     <a  class="nav-link p-3  mb-1 shadow-sm bg-light  bg-light "  style="font-size:1.2rem;" href="index.php?page=produits&id=<?=$_SESSION['id'] ?>"> 
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-fullscreen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
-  </svg>
-   Produits
-   </a>
-      <a  class="nav-link p-3  mb-1 shadow-sm bg-light "  style="font-size:1.3rem;" href="index.php?page=charges&id=<?=$_SESSION['id'] ?>"> 
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-fullscreen-exit" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5zM0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zm10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4z"/>
-   </svg>
-    Charges
-    </a>
-    <a style="font-size:1.3rem; " class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light " href="index.php?page=banque&id=<?=$_SESSION['id'] ?>">
-     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-credit-card-2-back" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M14 3H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
-     <path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1zM1 9h14v2H1V9z"/>
-   </svg> Banque 
-   </a>
-   <a   class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light " style="font-size:1.3rem;" href="index.php?page=capital&id=<?=$_SESSION['id'] ?>">
-    <svg width="1em"  height="1em" viewBox="0 0 16 16" class="bi bi-cash-stack" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path d="M14 3H1a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1h-1z"/>
-     <path fill-rule="evenodd" d="M15 5H1v8h14V5zM1 4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H1z"/>
-     <path d="M13 5a2 2 0 0 0 2 2V5h-2zM3 5a2 2 0 0 1-2 2V5h2zm10 8a2 2 0 0 1 2-2v2h-2zM3 13a2 2 0 0 0-2-2v2h2zm7-4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-   </svg>
-    Capital   
-   </a>
-   
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light " style="font-size:1.3rem;" href="index.php?page=actionnaires&id=<?=$_SESSION['id'] ?>">
-   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-   <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-   </svg>
-    Actionnaire
-   
-   </a>   
-   <a class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light " style="font-size:1.3rem; "   href="index.php?page=clients&id=<?=$_SESSION['id'] ?>">              
-   <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-               <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-             </svg>         
-               Clients <?php if ($client>0) {
-              ?>
-               <span style='color:green'>(<?= $client?>)</span>
-              <?php
-             }else {
-               echo '(0)';
-             }?>
-           </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light" style="font-size:1.3rem; " href="index.php?page=fournisseurs&id=<?=$_SESSION['id'] ?>">              
-        
-             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-               <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-             </svg>
-             Fournisseurs  <?php if ($fournisseurs>0) {
-              ?>
-               <span style='color:green'>(<?= $fournisseurs?>)</span>
-              <?php
-             }else {
-               echo '(0)';
-             }?>
-   </a>
-   
-      <a  class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light " style="font-size:1.3rem;" href="index.php?page=Stocks&id=<?=$_SESSION['id'] ?>"> 
-     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-    </svg>
-    Stocks
-   </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light "style="font-size:1.3rem;"  href="index.php?page=balance&id=<?=$_SESSION['id'] ?>">
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-hourglass-split" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0c0 .701.478 1.236 1.011 1.492A3.5 3.5 0 0 1 11.5 13s-.866-1.299-3-1.48V8.35z"/>
-   </svg>
-    Balances
-   </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light" style="font-size:1.3rem;" href="index.php?page=Bilan&id=<?=$_SESSION['id'] ?>">
-       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-       <path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-      </svg>
-     Bilan
-      </a>
-    <a  class="nav-link p-3  mb-1 shadow-sm bg-light text-secondary bg-light bg-light  " style="font-size:1.3rem;" href="index.php?page=cpc&id=<?=$_SESSION['id'] ?>"> 
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H4z"/>
-     <path fill-rule="evenodd" d="M4.5 10.5A.5.5 0 0 1 5 10h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
-   </svg>
-    CPC
-    </a>
+          <a  style="font-size:1.2rem;" class="nav-link  p-3    text-danger"  href="index.php?page=SupprimerImmoCorporelle&id=<?=$_GET['id'] ?>"><svg width="1.5em"  height="1.5em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+         <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+         </svg> Supprimer  </a>  
+         </li>
+   </ul>
+   </div>
+   </nav>
+             <?php
+         }else {
+             ?>
+
+<div class="row">
+     <div class="col-lg-3 col-12 pl-5  ">
+     <nav class="navbar sticky-top navbar-expand-lg navbar-light ">
+        <ul  class="navbar-nav  mr-auto ">
+         <li class="nav-item ">
+         <a  class="nav-link text-primary "  href="index.php?page=AmortissementImmoCorporelle&id=<?=$_GET['id'] ?>">              
+         <svg width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-graph-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5z"/>
+</svg> Cliquez ici
+</a> 
    </li>
    </ul>
    </div>
-   </div>
    </nav>
-   </div> 
-   <div class="col-lg-6 col-12">  
+             <?php
+         }
+       ?>
+   <div class="col-lg-6 mt-2 col-12">
+       <?php
+        if (isset($resultat['id'] )) {
 
-   <?php
-   if ($resultat['systemeS']=='Lineaire') {
-       ?>
-       <div class="col-12">
-        <div class="col-10 text-left bg-secondary text-light p-4">
-        <h1>Tableau d'Amortissement de <?=$resultat['marchandise'] ?></h1> 
-  </div>
-       <?php
-   }else {
-       ?>
-       <div class="col-12 text-left bg-secondary text-light p-4">
-        <h1>Tableau d'Amortissement de <?=$resultat['marchandise'] ?></h1> 
-  </div>
-       <?php
-   }
-  ?>
+            
+            if (  $resultat['systeme']=='Lineaire') {
+                ?>
+                <div class="col-12">
+                 <div class="col-10 text-left bg-secondary text-light p-4">
+                 <h1>Tableau d'Amortissement de <?=$resultat['immobilisation'] ?></h1> 
+           </div>
+                <?php
+            }else {
+                ?>
+                <div class="col-12 text-left bg-secondary text-light p-4">
+                 <h1>Tableau d'Amortissement de <?=$resultat['immobilisation'] ?></h1> 
+           </div>
+                <?php
+            }
+           
+        }else {
+            ?>
+            <div class="alert alert-warning alert-dismissible text-center fade show" role="alert">
+                Vous n'avez pas etablir le tableau d'amortissement  <strong>cliquer sur icone</strong> pour avoir le tableau 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            <?php
+        }
+       ?>  
+
     <?php
-    if ($resultat['dureeS']==1 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==1 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -445,12 +303,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -459,10 +317,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -536,10 +394,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?> 
             
     <?php
-    if ($resultat['dureeS']==2 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==2 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -586,12 +444,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -600,10 +458,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -695,10 +553,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>  
             
     <?php
-    if ($resultat['dureeS']==3 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==3 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -747,12 +605,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -761,10 +619,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -873,10 +731,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?> 
            
     <?php
-    if ($resultat['dureeS']==4 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==4 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -928,12 +786,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -942,10 +800,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -1074,10 +932,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
             
 <?php
-    if ($resultat['dureeS']==5 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==5 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -1132,12 +990,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -1146,10 +1004,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -1298,10 +1156,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
             
     <?php
-    if ($resultat['dureeS']==6 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==6 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -1358,12 +1216,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -1372,10 +1230,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -1532,10 +1390,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       }
     ?>
     <?php
-    if ($resultat['dureeS']==7 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==7 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -1593,12 +1451,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -1607,10 +1465,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -1781,10 +1639,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              
     
     <?php
-    if ($resultat['dureeS']==8 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==8 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -1846,12 +1704,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -1860,10 +1718,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -2064,10 +1922,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                       
     
     <?php
-    if ($resultat['dureeS']==9 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==9 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -2135,12 +1993,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -2149,10 +2007,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -2373,10 +2231,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                    
     
     <?php
-    if ($resultat['dureeS']==10 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==10 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -2446,12 +2304,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -2460,10 +2318,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -2701,10 +2559,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                   
     
     <?php
-    if ($resultat['dureeS']==11 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==11 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -2781,12 +2639,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -2795,10 +2653,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -3055,10 +2913,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       
     
     <?php
-    if ($resultat['dureeS']==12 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==12 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -3137,12 +2995,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -3151,10 +3009,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -3429,10 +3287,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     
     
     <?php
-    if ($resultat['dureeS']==13 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==13 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -3521,12 +3379,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -3535,10 +3393,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -3829,10 +3687,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     
     
     <?php
-    if ($resultat['dureeS']==14 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==14 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -3924,12 +3782,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -3938,10 +3796,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -4250,10 +4108,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     
     
     <?php
-    if ($resultat['dureeS']==15 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==15 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -4350,12 +4208,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -4364,10 +4222,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -4693,10 +4551,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
     
     <?php
-    if ($resultat['dureeS']==16 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==16 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -4794,12 +4652,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -4808,10 +4666,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -5158,10 +5016,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
  
     
     <?php
-    if ($resultat['dureeS']==17 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==17 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -5259,12 +5117,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -5273,10 +5131,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -5639,10 +5497,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
  
     
     <?php
-    if ($resultat['dureeS']==18 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==18 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -5744,12 +5602,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -5758,10 +5616,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -6143,10 +6001,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
  
     <?php
-    if ($resultat['dureeS']==19 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==19 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -6249,12 +6107,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -6263,10 +6121,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -6664,10 +6522,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
 
     <?php
-    if ($resultat['dureeS']==20 AND$resultat['systemeS']=='Lineaire') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==20 AND $resultat['systeme']=='Lineaire') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
             $annuite=$cout_acquisition*$taux_amortissement*$a1/1200;
@@ -6773,12 +6631,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1 "style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -6787,10 +6645,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -7205,19 +7063,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
     <!-- pour le syteme degessif -->
  <?php
-    if ($resultat['dureeS']==3 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==3 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -7227,9 +7085,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -7312,12 +7170,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -7327,10 +7185,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -7414,9 +7272,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -7462,7 +7320,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -7480,19 +7338,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
 
         <?php
-    if ($resultat['dureeS']==4 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==4 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -7502,9 +7360,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -7600,12 +7458,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -7615,10 +7473,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -7702,9 +7560,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -7750,7 +7608,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -7776,7 +7634,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -7792,19 +7650,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       }
     ?>
      <?php
-    if ($resultat['dureeS']==5 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==5 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -7814,9 +7672,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -7925,12 +7783,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -7940,10 +7798,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -8027,9 +7885,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -8075,7 +7933,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -8101,7 +7959,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -8127,7 +7985,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -8144,19 +8002,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       }
     ?>
       <?php
-    if ($resultat['dureeS']==6 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==6 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -8166,9 +8024,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -8288,12 +8146,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -8303,10 +8161,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -8390,9 +8248,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -8438,7 +8296,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -8464,7 +8322,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -8490,7 +8348,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -8516,7 +8374,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -8534,19 +8392,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       }
     ?>
      <?php
-    if ($resultat['dureeS']==7 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==7 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -8556,9 +8414,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -8690,12 +8548,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -8705,10 +8563,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -8792,9 +8650,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -8840,7 +8698,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -8866,7 +8724,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -8892,7 +8750,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -8918,7 +8776,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -8944,7 +8802,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -8961,19 +8819,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
        
      <?php
-    if ($resultat['dureeS']==8 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==8 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -8983,9 +8841,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -9134,12 +8992,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -9149,10 +9007,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -9236,9 +9094,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -9284,7 +9142,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -9310,7 +9168,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -9336,7 +9194,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -9362,7 +9220,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -9388,7 +9246,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -9414,7 +9272,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -9430,19 +9288,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       }
     ?>
       <?php
-    if ($resultat['dureeS']==9 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==9 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -9452,9 +9310,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -9611,12 +9469,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -9626,10 +9484,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -9713,9 +9571,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -9761,7 +9619,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -9787,7 +9645,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -9813,7 +9671,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -9839,7 +9697,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -9865,7 +9723,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -9891,7 +9749,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -9917,7 +9775,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -9933,19 +9791,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
       }
     ?>
      <?php
-    if ($resultat['dureeS']==10 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==10 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -9955,9 +9813,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -10127,12 +9985,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -10142,10 +10000,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -10229,9 +10087,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -10277,7 +10135,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -10303,7 +10161,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -10329,7 +10187,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -10355,7 +10213,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -10381,7 +10239,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -10407,7 +10265,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -10433,7 +10291,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -10459,7 +10317,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -10476,19 +10334,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
          
 <?php
-    if ($resultat['dureeS']==11 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==11 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -10498,9 +10356,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -10687,12 +10545,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -10702,10 +10560,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -10789,9 +10647,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -10837,7 +10695,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -10863,7 +10721,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -10889,7 +10747,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -10915,7 +10773,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -10941,7 +10799,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -10967,7 +10825,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -10993,7 +10851,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -11019,7 +10877,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -11045,7 +10903,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -11062,19 +10920,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>
       
       <?php
-    if ($resultat['dureeS']==12 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==12 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -11084,9 +10942,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -11281,12 +11139,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -11296,10 +11154,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -11383,9 +11241,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -11431,7 +11289,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -11457,7 +11315,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -11483,7 +11341,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -11509,7 +11367,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -11535,7 +11393,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -11561,7 +11419,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -11587,7 +11445,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -11613,7 +11471,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -11639,7 +11497,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -11665,7 +11523,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -11682,19 +11540,19 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     ?>   
      
     <?php
-    if ($resultat['dureeS']==13 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==13 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -11704,9 +11562,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -11915,12 +11773,12 @@ $vnc14=$vo14-$annuite14;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -11930,10 +11788,10 @@ $vnc14=$vo14-$annuite14;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -12017,9 +11875,9 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -12065,7 +11923,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -12091,7 +11949,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -12117,7 +11975,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -12143,7 +12001,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -12169,7 +12027,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -12195,7 +12053,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -12221,7 +12079,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -12247,7 +12105,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -12273,7 +12131,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -12299,7 +12157,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -12325,7 +12183,7 @@ $vnc14=$vo14-$annuite14;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -12341,19 +12199,19 @@ $vnc14=$vo14-$annuite14;
     ?>
 
     <?php
-    if ($resultat['dureeS']==14 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==14 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -12363,9 +12221,9 @@ $vnc14=$vo14-$annuite14;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -12587,12 +12445,12 @@ $vnc15=$vo15-$annuite15;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -12602,10 +12460,10 @@ $vnc15=$vo15-$annuite15;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -12689,9 +12547,9 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -12737,7 +12595,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -12763,7 +12621,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -12789,7 +12647,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -12815,7 +12673,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -12841,7 +12699,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -12867,7 +12725,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -12893,7 +12751,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -12919,7 +12777,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -12945,7 +12803,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -12971,7 +12829,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -12997,7 +12855,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -13023,7 +12881,7 @@ $vnc15=$vo15-$annuite15;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -13040,19 +12898,19 @@ $vnc15=$vo15-$annuite15;
     ?>
 
    <?php
-    if ($resultat['dureeS']==15 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==15 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -13062,9 +12920,9 @@ $vnc15=$vo15-$annuite15;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -13297,12 +13155,12 @@ $vnc16=$vo16-$annuite16;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -13312,10 +13170,10 @@ $vnc16=$vo16-$annuite16;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -13399,9 +13257,9 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -13447,7 +13305,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -13473,7 +13331,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -13499,7 +13357,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -13525,7 +13383,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -13551,7 +13409,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -13577,7 +13435,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -13603,7 +13461,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -13629,7 +13487,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -13655,7 +13513,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -13681,7 +13539,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -13707,7 +13565,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -13733,7 +13591,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -13759,7 +13617,7 @@ $vnc16=$vo16-$annuite16;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist16= $moist15-12;
                                echo $t16=12/$moist16 *100 .'%';
@@ -13777,19 +13635,19 @@ $vnc16=$vo16-$annuite16;
 
 
    <?php
-    if ($resultat['dureeS']==16 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==16 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -13799,9 +13657,9 @@ $vnc16=$vo16-$annuite16;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -14048,12 +13906,12 @@ $vnc17=$vo17-$annuite17;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -14063,10 +13921,10 @@ $vnc17=$vo17-$annuite17;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -14150,9 +14008,9 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -14198,7 +14056,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -14224,7 +14082,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -14250,7 +14108,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -14276,7 +14134,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -14302,7 +14160,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -14328,7 +14186,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -14354,7 +14212,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -14380,7 +14238,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -14406,7 +14264,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -14432,7 +14290,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -14458,7 +14316,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -14484,7 +14342,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -14510,7 +14368,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist16= $moist15-12;
                                echo $t16=12/$moist16 *100 .'%';
@@ -14536,7 +14394,7 @@ $vnc17=$vo17-$annuite17;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist17= $moist16-12;
                                echo $t17=12/$moist17 *100 .'%';
@@ -14554,19 +14412,19 @@ $vnc17=$vo17-$annuite17;
 
    
 <?php
-    if ($resultat['dureeS']==17 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==17 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -14576,9 +14434,9 @@ $vnc17=$vo17-$annuite17;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -14838,12 +14696,12 @@ $vnc18=$vo18-$annuite18;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -14853,10 +14711,10 @@ $vnc18=$vo18-$annuite18;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -14940,9 +14798,9 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -14988,7 +14846,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -15014,7 +14872,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -15040,7 +14898,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -15066,7 +14924,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -15092,7 +14950,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -15118,7 +14976,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -15144,7 +15002,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -15170,7 +15028,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -15196,7 +15054,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -15222,7 +15080,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -15248,7 +15106,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -15274,7 +15132,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -15300,7 +15158,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist16= $moist15-12;
                                echo $t16=12/$moist16 *100 .'%';
@@ -15326,7 +15184,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist17= $moist16-12;
                                echo $t17=12/$moist17 *100 .'%';
@@ -15352,7 +15210,7 @@ $vnc18=$vo18-$annuite18;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist18= $moist17-12;
                                echo $t18=12/$moist18 *100 .'%';
@@ -15369,19 +15227,19 @@ $vnc18=$vo18-$annuite18;
     ?>
     
 <?php
-    if ($resultat['dureeS']==18 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==18 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -15391,9 +15249,9 @@ $vnc18=$vo18-$annuite18;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -15676,12 +15534,12 @@ $vnc19=$vo19-$annuite19;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -15691,10 +15549,10 @@ $vnc19=$vo19-$annuite19;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -15778,9 +15636,9 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -15826,7 +15684,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -15852,7 +15710,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -15878,7 +15736,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -15904,7 +15762,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -15930,7 +15788,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -15956,7 +15814,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -15982,7 +15840,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -16008,7 +15866,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -16034,7 +15892,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -16060,7 +15918,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -16086,7 +15944,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -16112,7 +15970,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -16138,7 +15996,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist16= $moist15-12;
                                echo $t16=12/$moist16 *100 .'%';
@@ -16164,7 +16022,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist17= $moist16-12;
                                echo $t17=12/$moist17 *100 .'%';
@@ -16190,7 +16048,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist18= $moist17-12;
                                echo $t18=12/$moist18 *100 .'%';
@@ -16216,7 +16074,7 @@ $vnc19=$vo19-$annuite19;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist19= $moist18-12;
                                echo $t19=12/$moist19 *100 .'%';
@@ -16234,19 +16092,19 @@ $vnc19=$vo19-$annuite19;
     ?>
     
 <?php
-    if ($resultat['dureeS']==19 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==19 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -16256,9 +16114,9 @@ $vnc19=$vo19-$annuite19;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -16557,12 +16415,12 @@ $vnc20=$vo20-$annuite20;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -16572,10 +16430,10 @@ $vnc20=$vo20-$annuite20;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -16659,9 +16517,9 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -16707,7 +16565,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -16733,7 +16591,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -16759,7 +16617,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -16785,7 +16643,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -16811,7 +16669,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -16837,7 +16695,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -16863,7 +16721,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -16889,7 +16747,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -16915,7 +16773,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -16941,7 +16799,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -16967,7 +16825,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -16993,7 +16851,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -17019,7 +16877,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist16= $moist15-12;
                                echo $t16=12/$moist16 *100 .'%';
@@ -17045,7 +16903,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist17= $moist16-12;
                                echo $t17=12/$moist17 *100 .'%';
@@ -17071,7 +16929,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist18= $moist17-12;
                                echo $t18=12/$moist18 *100 .'%';
@@ -17097,7 +16955,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist19= $moist18-12;
                                echo $t19=12/$moist19 *100 .'%';
@@ -17123,7 +16981,7 @@ $vnc20=$vo20-$annuite20;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist20= $moist19-12;
                                echo $t20=12/$moist20 *100 .'%';
@@ -17140,19 +16998,19 @@ $vnc20=$vo20-$annuite20;
     ?>
     
 <?php
-    if ($resultat['dureeS']==20 AND$resultat['systemeS']=='Dégréssif') {
-            if ($resultat['moisS']>0) 
+    if ($resultat['duree']==20 AND $resultat['systeme']=='Dégréssif') {
+            if ($resultat['mois']>0) 
             {
-                $a1=12-$resultat['moisS'];
+                $a1=12-$resultat['mois'];
                 $a2=12-$a1;
             }
 
 
-            if ($resultat['dureeS']== 5 OR$resultat['dureeS']== 6)
+            if ($resultat['duree']== 5 OR$resultat['duree']== 6)
                            {
                            $taux_degressif= $taux_amortissement *2 ;
 
-                          }elseif ($resultat['dureeS']== 3 OR$resultat['dureeS'] ==4 )
+                          }elseif ($resultat['duree']== 3 OR$resultat['duree'] ==4 )
                           {
                           $taux_degressif= $taux_amortissement * 1.5 ;
                           }
@@ -17162,9 +17020,9 @@ $vnc20=$vo20-$annuite20;
 
         
            
-  $totalmois=$resultat['dureeS']*12;
-  $taux_linaire =$resultat['moisS']/$totalmois *100;          
-  $moist2=$totalmois-$resultat['moisS'];
+  $totalmois=$resultat['duree']*12;
+  $taux_linaire =$resultat['mois']/$totalmois *100;          
+  $moist2=$totalmois-$resultat['mois'];
   $t2= 12/$moist2 *100 ;
 
   $moist3=$totalmois-12;
@@ -17472,12 +17330,12 @@ $vnc21=$vo21-$annuite21;
                          
                      <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                      <?php
-                      if ($resultat['moisS']==1) {?>
-                       <?=$resultat['moisS'] ?> èr moisS
+                      if ($resultat['mois']==1) {?>
+                       <?=$resultat['mois'] ?> èr mois
                         <?php
                       } else {
                         ?>
-                        <?=$resultat['moisS'] ?>  ème moisS
+                        <?=$resultat['mois'] ?>  ème mois
                         <?php
                       }
                       ?>
@@ -17487,10 +17345,10 @@ $vnc21=$vo21-$annuite21;
                              <?=$cout_acquisition?>
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['systemeS'] ?>
+                         <?=$resultat['systeme'] ?>
                          </div>
                          <div class="col-2  pt-1"style='border:solid gray 0.5px'>
-                         <?=$resultat['dureeS'] ?> ans
+                         <?=$resultat['duree'] ?> ans
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                          <?=$taux_amortissement?> %
@@ -17574,9 +17432,9 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
-                                $moist2=$totalmois-$resultat['moisS'];
+                                $moist2=$totalmois-$resultat['mois'];
                                echo $t2= 12/$moist2 *100 .'%';
                           ?>
                          </div>
@@ -17622,7 +17480,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist4= $moist3-12;
                                echo $t4=12/$moist4 *100 .'%';
@@ -17648,7 +17506,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist5= $moist4-12;
                                echo $t5=12/$moist5 *100 .'%';
@@ -17674,7 +17532,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist6= $moist5-12;
                                echo $t6=12/$moist6 *100 .'%';
@@ -17700,7 +17558,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist7= $moist6-12;
                                echo $t7=12/$moist7 *100 .'%';
@@ -17726,7 +17584,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist8= $moist7-12;
                                echo $t8=12/$moist8 *100 .'%';
@@ -17752,7 +17610,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist9= $moist8-12;
                                echo $t9=12/$moist9 *100 .'%';
@@ -17778,7 +17636,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist10= $moist9-12;
                                echo $t10=12/$moist10 *100 .'%';
@@ -17804,7 +17662,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist11= $moist10-12;
                                echo $t11=12/$moist11 *100 .'%';
@@ -17830,7 +17688,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist12= $moist11-12;
                                echo $t12=12/$moist12 *100 .'%';
@@ -17856,7 +17714,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist13= $moist12-12;
                                echo $t13=12/$moist13 *100 .'%';
@@ -17882,7 +17740,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist14= $moist13-12;
                                echo $t14= 12/$moist14 *100 .'%';
@@ -17908,7 +17766,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist15= $moist14-12;
                                echo $t15=12/$moist15 *100 .'%';
@@ -17934,7 +17792,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist16= $moist15-12;
                                echo $t16=12/$moist16 *100 .'%';
@@ -17960,7 +17818,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist17= $moist16-12;
                                echo $t17=12/$moist17 *100 .'%';
@@ -17986,7 +17844,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist18= $moist17-12;
                                echo $t18=12/$moist18 *100 .'%';
@@ -18012,7 +17870,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist19= $moist18-12;
                                echo $t19=12/$moist19 *100 .'%';
@@ -18038,7 +17896,7 @@ $vnc21=$vo21-$annuite21;
                          </div>
                          <div class="col-2   pt-1"style='border:solid gray 0.5px'>
                           <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist20= $moist19-12;
                                echo $t20=12/$moist20 *100 .'%';
@@ -18063,7 +17921,7 @@ $vnc21=$vo21-$annuite21;
                          <h6> <?=$vnc21?> </h6>
                          </div>
                          <?php
-                               $totalmois=$resultat['dureeS']*12;
+                               $totalmois=$resultat['duree']*12;
                                
                                $moist21= $moist20-12;
                                echo 12/$moist21 *100 .'%';

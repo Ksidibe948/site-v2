@@ -23,6 +23,7 @@
 $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    $listeachat_marchandise=$bdd->prepare('SELECT id, marchandiseS, quantiteS,  DATE_FORMAT(date,"%d/%m/%Y à %Hh%imin%ss") AS date FROM stoks_marchandise where id_entrepriseS=? ORDER BY id DESC');
    $listeachat_marchandise->execute(array($_SESSION['id']));
+   $verificaiton=  $listeachat_marchandise->rowcount();
 
    ?>
 
@@ -220,12 +221,6 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    </svg>
     Factures de Ventes Marchandises
      </a>
-     <a style='font-size:1.3rem' class="nav-link p-3  mb-1 shadow-sm bg-light  text-info "  href="index.php?page=Listes_des_vente_marchandise&id=<?=$_SESSION['id'] ?>">
-  <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-  </svg>
-     Liste des Marchandise Acheter
-  </a>
      <a  class="nav-link p-3  mb-1 shadow-sm bg-light  bg-light "  style="font-size:1.2rem;" href="index.php?page=produits&id=<?=$_SESSION['id'] ?>"> 
     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-fullscreen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
@@ -318,12 +313,26 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    </nav>
    </div>
    <div class="col-lg-6 col-11"> 
+   <?php 
+       if ($verificaiton<=0) {
+         ?>
+         <div class="alert pl-5 ml-5 mt-5 alert-warning alert-dismissible fade show" role="alert">
+  <h5><strong>Vous n'avez pas encore payé une  marchandise ,Faut vous vendez une marchandise non enregistre</strong> </h5>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<?php
+          
+        }
+      ?>
     <div class="row ">
     <div class="col-lg-12 mt-3 ">
         <div class="card  ml-4 w-100 shadow-lg  bg-info text-secondary"  >
         <div class="card-title text-center pt-5">
         <a class="nav-link text-light"  href="index.php?page=nouvellefacturevente_marchandise&id=<?=$_SESSION['id'] ?>">
-         <p style='  font-size:1.5rem'> Vente de  Autre Marchandise Non enregistre </p>
+         <p style='  font-size:1.5rem'> Vendre une  Marchandise Non enregistre </p>
          <svg width="10em" height="10em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
           <path fill-rule="evenodd" d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
@@ -346,7 +355,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                 if ($resultat['quantiteS']>0) {
                   ?>
                   
-                   <div class="card ml-4 w-100 shadow-lg  p-4 " >
+                   <div class="card ml-4 w-100 mt-2 shadow-lg   " >
                    <a class="nav-link ligh  text-secondary bg-light" href="index.php?page=nouvellefacturevente_marchandise&id=<?=$resultat['id'] ?>">
                     <div class="card-title mt-2 " style=" border-radius: 10px;">
                     <div class="row">

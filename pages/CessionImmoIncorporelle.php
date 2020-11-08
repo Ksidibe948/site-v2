@@ -36,6 +36,7 @@
    FROM  CessionImmoIncorporelle,clients WHERE  CessionImmoIncorporelle.id_client=clients.id AND  CessionImmoIncorporelle. id_entreprise=? ORDER BY id DESC");
    $CessionImmoIncorporelle->execute(array($_SESSION['id']));
    $compte=  $CessionImmoIncorporelle->rowcount();
+
  ?>
 
 <?php
@@ -239,12 +240,6 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 </svg>
   Cessions Immobilisations Incorporelle
  </a>
- <a style='font-size:1.3rem' class="nav-link p-3  mb-1 shadow-sm bg-light text-info "  href="index.php?page=ListeAchatImmoIncorporelle&id=<?=$_SESSION['id'] ?>">
-  <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-  </svg>
-     Ajouter une nouvelle  facture
-  </a>
      <a  class="nav-link p-3  mb-1 shadow-sm bg-light  bg-light "  style="font-size:1.2rem;" href="index.php?page=produits&id=<?=$_SESSION['id'] ?>"> 
     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-fullscreen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
@@ -336,7 +331,25 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    </div>
    </nav>
    </div>
-   <div class="col-lg-6 col-12">    
+   <div class="col-lg-6 col-12">  
+     
+   <div class="row ">
+    <div class="col-lg-12 mt-3 ">
+        <div class="card  w-100 shadow-lg  bg-info mb-4"  >
+        <div class="card-title text-center pt-5">
+        <a  class="nav-link text-white"  href="index.php?page=ListeAchatImmoIncorporelle&id=<?=$_SESSION['id'] ?>">
+         <p style='  font-size:1.5rem'> Enrgistre une cession immobilisation Financière</p>
+         <svg width="10em" height="10em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+             </svg>
+       </a> 
+        </div>
+    </div>
+    </div>
+    </div>  
+    <?php
+       if ( $compte>0) {
+            ?>    
   <div class="card shadow-lg pl-4 pb-5 pt-5 pr-4 w-100">
    <div class="row ">
           <div class="col-12 pt-2 mb-3 text-center text-light   bg-secondary"style='border:solid 0.5px gray'>
@@ -393,6 +406,9 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
     </div> 
     </div>
     </div>
+    <?php
+    }
+    ?>
      </div>
     </div>
     </div>     

@@ -270,212 +270,91 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
        </ul>
      </div>
    </nav>
-<div class="row">
-     <div class="col-lg-3 col-12 ">
-     <nav class="navbar sticky-top navbar-expand-lg navbar-light ">
-     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-     <div class="overflow-auto" style='width:72%;
-       height:800px;'>
-        <ul  class="navbar-nav  mr-auto ">
-         <li class="nav-item ">
-         <a   class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light   " style='  font-size:1.3rem'  href="index.php?page=utilisateurs">
-         <svg width="1.3rem" height="1.3rem" viewBox="0 0 16 16" class="bi bi-globe" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"/>
-        </svg> Publications <span class="sr-only">(current)</span></a>
-         <a  class="nav-link  p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light  " style="font-size:1.3rem"  href="index.php?page=comptabilite&id=<?=$_SESSION['id'] ?>">
-         <svg width="1.3rem" height="1.3rem" viewBox="0 0 16 16" class="bi bi-calculator-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2 .5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-2zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zM4.5 9a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM4 12.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zM7.5 6a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM7 9.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm.5 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM10 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm.5 2.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-.5-.5h-1z"/>
-        </svg> Comptabilité</a>
-        <a  class="nav-link  p-3  mb-1 shadow-sm bg-light  bg-light " style="font-size:1.3rem; " href="index.php?page=comptabilité_generale&id=<?=$_SESSION['id'] ?>">
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-justify" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-         <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
-       </svg>
-      Comptabilités générales
-     </a>
-    <a style="font-size:1.3rem;color:#A41FDE " class="nav-link p-3  mb-1 shadow-sm bg-light bg-light y bg-light " href="index.php?page=banque&id=<?=$_SESSION['id'] ?>">
-     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-credit-card-2-back" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M14 3H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
-     <path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1zM1 9h14v2H1V9z"/>
-   </svg> Banque 
-   </a>
-   <a style='margin-left:15px ;' class="nav-link p-3  mb-1 shadow-sm bg-light text-success " href="index.php?page=modifier_banque&id=<?=$element_banque['id'] ?>"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-  </svg> Modification de   <?=$element_banque['nom_banque'] ?></a>
-   <a   class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light " style="font-size:1.3rem;" href="index.php?page=capital&id=<?=$_SESSION['id'] ?>">
-    <svg width="1em"  height="1em" viewBox="0 0 16 16" class="bi bi-cash-stack" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path d="M14 3H1a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1h-1z"/>
-     <path fill-rule="evenodd" d="M15 5H1v8h14V5zM1 4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H1z"/>
-     <path d="M13 5a2 2 0 0 0 2 2V5h-2zM3 5a2 2 0 0 1-2 2V5h2zm10 8a2 2 0 0 1 2-2v2h-2zM3 13a2 2 0 0 0-2-2v2h2zm7-4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-   </svg>
-    Capital   
-   </a>
-   
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light " style="font-size:1.3rem;" href="index.php?page=actionnaires&id=<?=$_SESSION['id'] ?>">
-   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-   <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-   </svg>
-    Actionnaire
-   
-   </a>   
-   <a class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light " style="font-size:1.3rem; "   href="index.php?page=clients&id=<?=$_SESSION['id'] ?>">              
-   <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-               <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-             </svg>         
-               Clients <?php if ($client>0) {
-              ?>
-               <span style='color:green'>(<?= $client?>)</span>
-              <?php
-             }else {
-               echo '(0)';
-             }?>
-           </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light" style="font-size:1.3rem; " href="index.php?page=fournisseurs&id=<?=$_SESSION['id'] ?>">              
-        
-             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-               <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-             </svg>
-             Fournisseurs  <?php if ($fournisseurs>0) {
-              ?>
-               <span style='color:green'>(<?= $fournisseurs?>)</span>
-              <?php
-             }else {
-               echo '(0)';
-             }?>
-   </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light " style="font-size:1.3rem; "  href="index.php?page=factures&id=<?=$_SESSION['id'] ?>">              
-   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-     <path fill-rule="evenodd" d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-     <circle cx="3.5" cy="5.5" r=".5"/>
-     <circle cx="3.5" cy="8" r=".5"/>
-     <circle cx="3.5" cy="10.5" r=".5"/>
-   </svg>
-    Factures
-     </a>
-     <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light "  style="font-size:1.3rem;" href="index.php?page=produits&id=<?=$_SESSION['id'] ?>"> 
-     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-fullscreen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
-   </svg>
-    Produits
-    </a>
-    <a  class="nav-link p-3  mb-1 shadow-sm bg-light "  style="font-size:1.3rem;" href="index.php?page=charges&id=<?=$_SESSION['id'] ?>"> 
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-fullscreen-exit" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5zM0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zm10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4z"/>
-   </svg>
-    Charges
-    </a>
-      <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light " style="font-size:1.3rem;" href="index.php?page=Stocks&id=<?=$_SESSION['id'] ?>"> 
-     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-    </svg>
-    Stocks
-   </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light "style="font-size:1.3rem;"  href="index.php?page=balance&id=<?=$_SESSION['id'] ?>">
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-hourglass-split" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0c0 .701.478 1.236 1.011 1.492A3.5 3.5 0 0 1 11.5 13s-.866-1.299-3-1.48V8.35z"/>
-   </svg>
-    Balances
-   </a>
-   <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light" style="font-size:1.3rem;" href="index.php?page=Bilan&id=<?=$_SESSION['id'] ?>">
-       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-       <path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-      </svg>
-     Bilan
-      </a>
-    <a  class="nav-link p-3  mb-1 shadow-sm bg-light bg-light text-secondary bg-light  " style="font-size:1.3rem;" href="index.php?page=cpc&id=<?=$_SESSION['id'] ?>"> 
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-     <path fill-rule="evenodd" d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H4z"/>
-     <path fill-rule="evenodd" d="M4.5 10.5A.5.5 0 0 1 5 10h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
-   </svg>
-    CPC
-    </a>
-   </li>
-   </ul>
-   </div>
-   </div>
-   </nav>
-   </div> 
-   <div class="col-lg-6 col-12">     
+   <div class=" col-12">     
 <!-- la partie inscription -->
                    
-                            <div class="col-lg-10">
-                            <div class="card shadow-lg bg-light text-secondary w-100" style="width: 18rem; ">
+                            <div class="col-lg-12 ">
+                            <div class="card   text-secondary pb-5 bg-light w-100" style="width: 18rem; ">
                             <div class="card-body">
-                                <h1 class="card-title bg-secondary text-light p-4 text-center">
-                                Modifier
-                                </h1><hr>
+                               
+                              <form action="" method="POST" enctype="multipart/form-data">
+                              <div class="form-group row ">
+                            <div class="col-2"></div>
+                               <label for="inputPassword" class="col-lg-2  bg-light bg-light  pl-5 col-form-label"><h6>Nom de la banque :</h6></label>
+                              <div class="col-lg-2  bg-light bg-light">
+                              <input type="text  " value='<?=  $element_banque['nom_banque'] ?>' name='nom_banque'class="form-control" id="inputCity " required placeholder="  Ex: BMC ">
+                              </div>
+                              <div class="col-1"></div>
+                    
+                              <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>Photo de la banque :</h6></label>
+                              <div class="col-lg-2  bg-light">
+                              <input type="file" value='<?=  $element_banque['photo'] ?>'  class="form-control" id="inputCity " name='monfichier'  class="form-control mr-5" id="inputCity" >
+                              </div> 
+                              </div>
+                              <div class="form-group row">
+                              <div class="col-2"></div>
+                               <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>Numéro de la banque :</h6></label>
+                              <div class="col-lg-2  bg-light">
+                              <input type="number" value='<?=  $element_banque['numero'] ?>'   name='numero' class="form-control" id="inputCity" required placeholder="  Ex:+212 0640637157 ">
+                              </div> 
+                              <div class="col-1"></div>
+                        
+                              <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>Montant de depôt :</h6></label>
+                              <div class="col-lg-2  bg-light">
+                              <input type="number" value='<?=  $element_banque['montant'] ?>'   name='montant' class="form-control" id="inputCity " required placeholder="  Ex: 1000000 ">
+                              </div>
+                           
+                            </div>
+                              <div class="form-group row">
+                              <div class="col-2"></div>
+                              <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>Email de la banque :</h6></label>
+                            <div class="col-lg-2  bg-light">
+                            <input type="text" value='<?=  $element_banque['email'] ?>'  name='email' class="form-control" id="inputCity"  placeholder="  Ex:bmc@gmail.com">
+                            </div> 
+                               
+                              <div class="col-1"></div>
+                     
+        
+                              
+                              <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>Frais des opérations  :</h6></label>
+                              <div class="col-lg-2  bg-light">
+                              <input type="number" value='<?=  $element_banque['frais'] ?>'   name="frais"   class="form-control" id="inputCity "  placeholder="  Ex: 100 ">
+                              </div>
+                              </div>
+                            <div class="form-group row">
+                            <div class="col-2"></div>
+                            
+                            <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>Adresse de la Banque :</h6></label>
+                              <div class="col-lg-2  bg-light">
+                              <input type="text" value='<?=  $element_banque['adresse'] ?>'   name='adresse'class="form-control" id="inputCity " required  placeholder="  Ex: BMC ">
+                              </div>
+                              <div class="col-1"></div>
+                     
+                               <label for="inputPassword" class="col-lg-2  bg-light col-form-label bg-light pl-5"><h6>TVA bancaire  :</h6></label>
+                              <div class="col-lg-2  bg-light">
+                              <select id="inputState" value='<?=  $element_banque['taux_tva'] ?>'  name="taux_tva" class="form-control">
+                                    <option>10</option>
+                                </select>
+                              </div>
+                              </div>
+                            <div class="form-group row">
+                            <div class="col-3"></div>
+                              <div class="col-6 text-center ">
+                                 <input type="submit" class='bg-success text-white ' value="Confirmer" >
+                              </div>
+                            </div>
+
+                       
+                                   
+               
+                                </form>
+                                 
                                 <div class="row">
                                     <div class="col-lg-3"></div>
                                     <div class="col-lg-6">
                                     <?="<img src='".$element_banque['photo']."' class='card-img' alt=''>" ;?>
                                     </div>
                                 </div><hr>
-                              <form action="" method="POST" enctype="multipart/form-data">
-                              <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Nom de la banque</h6></label>
-                              <div class="col-lg-6">
-                              <input type="text" value='<?=  $element_banque['nom_banque'] ?>' name='nom_banque'class="form-control" id="inputCity " required placeholder="  Ex: BMC ">
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Adresse de la Banque</h6></label>
-                              <div class="col-lg-6">
-                              <input type="text" value='<?=  $element_banque['adresse'] ?>'   name='adresse'class="form-control" id="inputCity " required  placeholder="  Ex: BMC ">
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Numéro de la banque</h6></label>
-                              <div class="col-lg-6">
-                              <input type="number" value='<?=  $element_banque['numero'] ?>'   name='numero' class="form-control" id="inputCity" required placeholder="  Ex:+212 0640637157 ">
-                              </div> 
-                            </div>
-                            <div class="form-group row">
-                     
-                             <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Email de la banque</h6></label>
-                            <div class="col-lg-6">
-                            <input type="text" value='<?=  $element_banque['email'] ?>'  name='email' class="form-control" id="inputCity"  placeholder="  Ex:bmc@gmail.com">
-                            </div> 
-                          </div>
-                            <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Photo de la banque</h6></label>
-                              <div class="col-lg-6">
-                              <input type="file" value='<?=  $element_banque['photo'] ?>'  class="form-control" id="inputCity " name='monfichier'  class="form-control mr-5" id="inputCity" >
-                              </div> 
-                            </div>
-                            <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Montant de depôt</h6></label>
-                              <div class="col-lg-6">
-                              <input type="number" value='<?=  $element_banque['montant'] ?>'   name='montant' class="form-control" id="inputCity " required placeholder="  Ex: 1000000 ">
-                              </div>
-                            </div>
-                                 
-                            <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>Frais des opérations </h6></label>
-                              <div class="col-lg-6">
-                              <input type="number" value='<?=  $element_banque['frais'] ?>'   name="frais"   class="form-control" id="inputCity "  placeholder="  Ex: 100 ">
-                              </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                     
-                               <label for="inputPassword" class="col-lg-3 col-form-label"><H6>TVA bancaire </h6></label>
-                              <div class="col-lg-6">
-                              <select id="inputState" value='<?=  $element_banque['taux_tva'] ?>'  name="taux_tva" class="form-control">
-                                    <option>10</option>
-                                </select>
-                              </div>
-                            </div>
-
-                                <div class="form-group text-center">
-                                    <input type="submit" class='bg-success text-white ' value="Confirmer" >
-                                </div>
-                                </form>
                             </div>
                             </div>
                          </div>

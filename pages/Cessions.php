@@ -322,8 +322,8 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    <div class="col-lg-6 col-11">       
    <div class="row ">
     <div class="col-lg-4 ">
-        <div class="card w-100 ml-4 shadow-lg bg-lightpb-5  mb-2"  >  
-        <div class="card-title text-center ">
+        <div class="card text-center mt-5  w-100 ml-4 shadow-lg bg-lightpb-5  mb-2"  >  
+       
         <a  class="nav-link text-secondary bg-light "  href="index.php?page=CessionImmoCorporelle&id=<?=$_SESSION['id'] ?>">              
           <p style='  font-size:1.5rem;'>Cession Immobilisations Corporelle</p> <hr>
           <svg color='#A41FDE' width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -334,12 +334,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
           <circle cx="3.5" cy="10.5" r=".5"/>
         </svg>
         </a> 
-        </div>
+  
     </div>
     </div>
     <div class="col-lg-4  ">
-        <div class="card w-100  shadow-lg bg-lightpb-5  mb-2"  >
-        <div class="card-title text-center ">
+        <div class="card text-center mt-5  w-100  shadow-lg bg-lightpb-5  mb-2"  >
+   
         <a  class="nav-link text-secondary bg-light" href="index.php?page=CessionImmoIncorporelle&id=<?=$_SESSION['id'] ?>"> 
           <p style='  font-size:1.5rem'>Cession Immobilisations Incorporelles</p> <hr>
           <svg color='#A41FDE' width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -350,12 +350,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
           <circle cx="3.5" cy="10.5" r=".5"/>
         </svg>
           </a> 
-        </div>
+
     </div>
     </div>
     <div class="col-lg-4  ">
-        <div class="card w-100  shadow-lg bg-lightpb-5  mb-2"  >
-        <div class="card-title text-center ">
+        <div class="card text-center mt-5  w-100  shadow-lg bg-lightpb-5  mb-2"  >
+
         <a  class="nav-link text-secondary bg-light"  href="index.php?page=CessionImmoFinanciere&id=<?=$_SESSION['id'] ?>"> 
           <p style='  font-size:1.5rem'>Cession Immobilisations Financières</p> <hr>
           <svg color='#A41FDE' width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -366,7 +366,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
           <circle cx="3.5" cy="10.5" r=".5"/>
         </svg>
           </a> 
-        </div>
+
     </div>
     </div>
      </div>

@@ -22,26 +22,22 @@
  $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    
  $select=$bdd->prepare("SELECT
-  liberations.id_actionnaire,
- liberations.apport,
- liberations.moyen_payement,
- liberations.montant_payer,
-    actionnaires.nom,
- actionnaires.prenom, 
- actionnaires.telephone,
- actionnaires.adresse, 
- actionnaires.logo,
- DATE_FORMAT(liberations.date,'%d/%m/%Y à %Hh%imin%ss') AS date
- FROM  liberations,actionnaires  where liberations.id_actionnaire = actionnaires.id AND id_entreprise=?");
+
+telephone,
+adresse, 
+logo,
+ DATE_FORMAT(date,'%d/%m/%Y à %Hh%imin%ss') AS date
+ FROM  actionnaires  where id_entreprise=?");
 $select->execute(array($_SESSION['id']));
 $count=$select->rowcount();
 ?>
  
-<?php
-   $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $select=$bdd->prepare('SELECT * FROM actionnaires where id_entreprise=? ORDER BY id DESC');
-   $select->execute(array($_SESSION['id']));
-   
+
+   <?php
+$bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
+   $actionnaires=$bdd->prepare('SELECT id, nom,prenom, telephone,adresse, logo,montant_souscrit,logo,
+   DATE_FORMAT(date,"%d/%m/%Y à %Hh%imin%ss") AS date FROM actionnaires where id_entreprise=? ORDER BY id DESC');
+   $actionnaires->execute(array($_SESSION['id']));
    ?>
 <?php
    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
@@ -333,16 +329,10 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
      </div> 
      <div class="col-lg-6 col-12">  
      <div class="row ">
- <?php
-   if (  $resultatss['capital']>0) {
-     ?>
-
-  
-   
     <div class="col-lg-12 mt-3 ">
         <div class="card  w-100 shadow-lg  bg-info mb-4"  >
         <div class="card-title text-center pt-5">
-        <a style='' class="nav-link text-white"  href="index.php?page=nouveau_actionnaire&id=<?=$_SESSION['id'] ?>">
+        <a  class="nav-link text-white"  href="index.php?page=nouveau_actionnaire&id=<?=$_SESSION['id'] ?>">
          <p style='  font-size:1.5rem'>Ajouter un actionnaire</p>
          <svg width="8em" height="8em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
          <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -351,64 +341,60 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
         </div>
     </div>
     </div>
-    <div class="col-lg-12 text-center bg-secondary text-light p-4 mb-3">
+    </div>
+  
+    <div class="card w-100 shadow-lg pl-4 pb-5 pr-4 bg-white " >
+    <div class="col-12 text-center bg-secondary  text-light mb-2 mt-2 pt-2 ">
        <h1>La liste des actionnaires</h1>
      </div>
-     <?php
-     
-     while($resultat=$select->fetch())
-     {
-         ?>
-         <div class="col-lg-4">
-        
-          <div class="card w-100 shadow-lg  bg-white " >
-          <a class="nav-link text-secondary bg-light" href="index.php?page=detail_actionnaire&id=<?=$resultat['id'] ?>">
-             <div class="col-lg-12 text-secondary bg-light text-center pb-1 pt-1 ">
-            <h5> <?= $resultat['nom'] ?> <?= $resultat['prenom'] ?></h5>
+   <div class="row">
+   <div class="col-2 bg-light"style=' border: solid 1px black'><h5>Date</h5></div>
+   <div class="col-2 bg-light"style=' border: solid 1px black'><h5>Nom</h5></div>
+   <div class="col-2 bg-light"style=' border: solid 1px black'><h5>prenom </h5></div>
+   <div class="col-2 bg-light"style=' border: solid 1px black'><h5>Téléphone</h5></div>
+   <div class="col-2 bg-light"style=' border: solid 1px black'><h5>Adresse</h5></div>
+   <div class="col-2 bg-light"style=' border: solid 1px black'><h5>Montant Souscript</h5></div>
+   </div>
+     <div class="row">
+              <?php
+                  $total_capital=0;
+              while($resultats=$actionnaires->fetch())
+              {
+               $total_capital= $total_capital+$resultats['montant_souscrit'];
+
+                 ?>
+  <div class="col-12">
+          <a  href="index.php?page=detail_actionnaire&id=<?=$resultats['id'] ?>"style='color:black ;text-decoration:none '>
+          <div class="row">
+          <div class="col-2"  style=' border: solid 1px black'>
+             <?= $resultats['date'] ?>
              </div>
-             <div class='imagess'>
-             <?="<img src='".$resultat['logo']."' class='card-img' ' alt=''>" ;?>
-          </div>
+             <div class="col-2  "style=' border: solid 1px black'>
+             <?= $resultats['nom'] ?>
+             </div>
+             <div class="col-2 "style=' border: solid 1px black'> <?= $resultats['prenom'] ?>
+             </div>
+             <div class="col-2  "style=' border: solid 1px black'> <?= $resultats['telephone'] ?>
+             </div>
+             <div class="col-2  "style=' border: solid 1px black'><?= $resultats['adresse'] ?>
+             </div>
+             <div class="col-2  "style=' border: solid 1px black'><?= $resultats['montant_souscrit'] ?> dh
+             </div>
           </div>
           </a>
-         </div>
-           
+          </div>
+          
+      
          <?php
      }
-     ?>
-     <?php
+     
     
-   }else {
-    ?>
-     <div class="col-lg-12 text-center bg-secondary text-light p-4 mb-3">
-       <h1>La liste des actionnaires</h1>
-     </div>
-     <?php
-     
-     while($resultat=$select->fetch())
-     {
-         ?>
-         <div class="col-lg-4">
-        
-          <div class="card w-100 shadow-lg  bg-white " >
-          <a class="nav-link text-secondary bg-light" href="index.php?page=detail_actionnaire&id=<?=$resultat['id'] ?>">
-             <div class="col-lg-12 text-secondary bg-light text-center pb-1 pt-1 ">
-            <h5> <?= $resultat['nom'] ?> <?= $resultat['prenom'] ?></h5>
-             </div>
-             <div class='imagess'>
-             <?="<img src='".$resultat['logo']."' class='card-img' ' alt=''>" ;?>
-          </div>
-          </div>
-          </a>
-         </div>
-           
-         <?php
-     }
      ?>
-    <?php
-   }
-   
- ?>
+      <div class="col-10 bg-light"style=' border: solid 1px black'>
+       <h4>   capital</h4>
+          </div>
+          <div class="col-2 bg-light"style=' border: solid 1px black'><h4><?=  $total_capital;?> dh </h4></div>
+      </div>
         </div>
         </div>
         </div>

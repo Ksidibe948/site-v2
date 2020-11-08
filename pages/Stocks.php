@@ -304,11 +304,11 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
  <div class="col-lg-8 col-10 ml-5 mt-5 ">    
    <div class="row ">
         <div class="col-lg-4 ">
-        <a class="nav-link "  href="index.php?page=stocks_marchandise&id=<?=$_SESSION['id'] ?>">
-         <div class="card w-100 shadow-lg p-3 bg-light "  >
-         <div class="card w-100 shadow-lg pb-5 bg-white "  >
-          <div class="card-title text-center  text-white bg-secondary pt-2">
-            <hr><p style='  font-size:1.5rem'>Stocks de Marchandises</p><hr>
+         <div class="card w-100 shadow-lg   bg-light "  >
+
+         <a class="nav-link text-secondary bg-light "  href="index.php?page=stocks_marchandise&id=<?=$_SESSION['id'] ?>">
+          <div class="card-title text-center  text-seconcary  pt-2">
+           <p style='  font-size:1.5rem'>Stocks de Marchandises</p><hr>
             </div>
             <div class='imagess'>
             <div class="text-center">
@@ -317,44 +317,48 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
             </svg>
             </div>
             </div>
-          </div>
+
           </a>
          </div>
          </div>
-         <div class="col-lg-4 ">
-        <a class="nav-link "  href="index.php?page=stock_matiere_premiere&id=<?=$_SESSION['id'] ?>">
-        <div class="card w-100 shadow-lg p-3 bg-light "  >
-         <div class="card w-100 shadow-lg pb-5 bg-white "  >
-          <div class="card-title text-center text-white bg-secondarytext-white bg-secondary  pt-2">
-            <hr><p style='  font-size:1.5rem'>Stocks Matiere premiere</p><hr>
+        <div class="col-lg-4 ">
+         <div class="card w-100 shadow-lg   bg-light "  >
+
+         <a class="nav-link text-secondary bg-light "  href="index.php?page=stock_matiere_premiere&id=<?=$_SESSION['id'] ?>">
+          <div class="card-title text-center  text-seconcary  pt-2">
+           <p style='  font-size:1.5rem'>Stocks Matiere premiere</p><hr>
             </div>
             <div class='imagess'>
             <div class="text-center">
-            <svg width="10em" color='#A41FDE'  height="10em" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <svg width="10em" color='#A41FDE'  height="10em" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-            </svg></div>
-           </div>
-          </div>
+            </svg>
+            </div>
+            </div>
+
           </a>
          </div>
          </div>
+
          <div class="col-lg-4 ">
-        <a class="nav-link "  href="index.php?page=stock_matiere_premiere&id=<?=$_SESSION['id'] ?>">
-        <div class="card w-100 shadow-lg p-3 bg-light "  >
-         <div class="card w-100 shadow-lg pb-5 bg-white "  >
-          <div class="card-title text-center text-white bg-secondarytext-white bg-secondary  pt-2">
-            <hr><p style='  font-size:1.5rem'>Stocks de Produits</p><hr>
+         <div class="card w-100 shadow-lg   bg-light "  >
+
+         <a class="nav-link text-secondary bg-light "  href="index.php?page=stock_matiere_premiere&id=<?=$_SESSION['id'] ?>">
+          <div class="card-title text-center  text-seconcary  pt-2">
+           <p style='  font-size:1.5rem'>Stocks de Produits</p><hr>
             </div>
             <div class='imagess'>
             <div class="text-center">
-            <svg width="10em" color='#A41FDE'  height="10em" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <svg width="10em" color='#A41FDE'  height="10em" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-            </svg></div>
-           </div>
-          </div>
+            </svg>
+            </div>
+            </div>
+
           </a>
          </div>
          </div>
+
         </div>
         </div>
   

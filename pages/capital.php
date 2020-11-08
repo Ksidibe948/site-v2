@@ -44,7 +44,8 @@ if ($_GET['id']) {
    ?>
 <?php
 $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $actionnaires=$bdd->prepare('SELECT * FROM actionnaires where id_entreprise=? ORDER BY id DESC');
+   $actionnaires=$bdd->prepare('SELECT nom,prenom, telephone,adresse, logo,montant_souscrit,logo,
+   DATE_FORMAT(date,"%d/%m/%Y à %Hh%imin%ss") AS date FROM actionnaires where id_entreprise=? ORDER BY id DESC');
    $actionnaires->execute(array($_SESSION['id']));
    ?>
      <?php
@@ -317,54 +318,24 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
             ?>
             
    <div class="card shadow-lg pl-4 p-4 pr-4 ">
+    <?php
+    
+    ?>
     <div class="row  ">
                 <div class="col-12">
                   <div class="row">
                     <div class="col-lg-12 text-center p-4 bg-secondary text-light">
-                      <h1>Liste des Capitaux</h1>
+                      <h1>Liste des actionnaires</h1>
                     </div>
-                    <div class="col-3 bg-light" style='border:solid gray 0.2px; font-size:1.5rem'>Date</div>
-                    <div class="col-3 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Capital</div>
-                    <div class="col-3 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Nombre d'action</div>
-                    <div class="col-3 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'> Prix d'une action</div>
+                    <div class="col-2 bg-light" style='border:solid gray 0.2px; font-size:1.5rem'>Date</div>
+                    <div class="col-2 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Nom </div>
+                    <div class="col-2 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Prénom</div>
+                    <div class="col-2 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Téléphone </div>
+                    <div class="col-2 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Adresse </div>
+                    <div class="col-2 bg-light"style='border:solid gray 0.2px; font-size:1.5rem'>Montant Souscript</div>
                   </div>
                   </div>
-                 
-     <?php
      
-        
-          $prix_action=$resultat['capital']/$resultat['actions'];
-            ?>
-            
-             <div class="col-12">
-                <div class="row">
-                    <div class="col-3"style='border:solid gray 0.2px; font-size:1.2rem'><?= $resultat['date'] ?></div>
-                    <div class="col-3"style='border:solid gray 0.2px; font-size:1.2rem'><?= $resultat['capital'] ?> dh</div>
-                    <div class="col-3"style='border:solid gray 0.2px; font-size:1.2rem'><?= $resultat['actions'] ?> Actions</div>
-                    <div class="col-3"style='border:solid gray 0.2px; font-size:1.2rem'> <?=$prix_action ?> dh</div>
-                  </div>
-                  </div>
-                  <?php
-     
-              while($resultat=$select->fetch())
-              {
-                  ?>
-         <div class="col-lg-4">
-        
-          <div class="card w-100 shadow-lg  bg-white " >
-          <a class="nav-link text-secondary bg-light" href="index.php?page=detail_actionnaire&id=<?=$resultat['id'] ?>">
-             <div class="col-lg-12 text-secondary bg-light text-center pb-1 pt-1 ">
-            <h5> <?= $resultat['nom'] ?> <?= $resultat['prenom'] ?></h5>
-             </div>
-             <div class='imagess'>
-             <?="<img src='".$resultat['logo']."' class='card-img' ' alt=''>" ;?>
-          </div>
-          </div>
-          </a>
-         </div>
-         <?php
-     }
-     ?>
               
             <?php
             

@@ -27,7 +27,14 @@
   }
    
    ?>
-   
+      <?php
+$bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
+   $actionnaires=$bdd->prepare('SELECT id, nom,prenom, telephone,adresse, logo,montant_souscrit,logo,
+   DATE_FORMAT(date,"%d/%m/%Y à %Hh%imin%ss") AS date FROM actionnaires where id=? ORDER BY id DESC');
+   $actionnaires->execute(array($_GET['id']));
+   $actionnairess=$actionnaires->fetch();
+  
+   ?>
 <?php
 if (isset($_GET['id'])) {
     $getid=$_GET['id'];
@@ -45,7 +52,8 @@ if (isset($_GET['id'])) {
               $apport=  $_POST['apport'];
              $numero_banque= $_POST['numero_bancaire'];
              $montant_payer=$_POST['montant_payer'];
-             
+             $modificationss=$bdd->prepare('UPDATE actionnaires SET montant_souscrit=montant_souscrit-? WHERE id=?');
+             $modificationss->execute(array( $montant_payer,$getid));
              $insert=$bdd->prepare('INSERT INTO 
              liberations(id_entreprise,id_actionnaire,apport,numero_banque,montant_payer)
              VALUES(?,?,?,?,?)
@@ -53,7 +61,6 @@ if (isset($_GET['id'])) {
              $insert->execute(array( $_SESSION['id'],$getid,$apport,$numero_banque,$montant_payer));
              $modification = $bdd->prepare("update banque set montant = montant +  ? where id = ? ");
              $modification->execute(array($montant_payer,$numero_banque ));
-             
              header('Location:index.php?page=detail_actionnaire&id='.$getid);
       }                 
               
@@ -86,11 +93,6 @@ if (isset($_GET['id'])) {
 
    ?>
  
- <?php
-   $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $select=$bdd->prepare('SELECT * FROM actionnaires where id_entreprise=? ORDER BY id DESC');
-   $select->execute(array($_SESSION['id']));
-   ?>
 
    <?php
    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
@@ -105,11 +107,6 @@ if (isset($_GET['id'])) {
    ?>
 
 
-<?php
-$bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $actionnaires=$bdd->prepare('SELECT * FROM actionnaires where id_entreprise=? ORDER BY id DESC');
-   $actionnaires->execute(array($_SESSION['id']));
-   ?>
      <?php
    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    $capitals=$bdd->prepare('SELECT * FROM capitals where id_entreprise=? ORDER BY id DESC');
@@ -610,7 +607,6 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
   </div>
   </nav>
   </div>
-  
      <div class="container">
    <div class="col-lg-9">
                             <!-- la partie inscription -->
@@ -648,7 +644,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                               
                               <label for="inputPassword" class="col-12 col-form-label">Montant Payer:  </label>
                               <div class="col-12">
-                              <input type="number"  name='montant_payer'class="form-control" id="inputCity "  placeholder="  Ex: 100 ">
+                              <input type="number" value='<?=  $actionnairess['montant_souscrit']?>'  name='montant_payer'class="form-control" id="inputCity "  placeholder="  Ex: 100 ">
                               </div>
                             </div><hr>
 

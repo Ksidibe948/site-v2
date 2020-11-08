@@ -334,17 +334,17 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    </div> 
    <div class="col-lg-6 col-12">   
    <?php
-   if ($resultat['systemeS']=='Lineaire') {
+   if ($resultat['systeme']=='Lineaire') {
        ?>
        <div class="col-12">
         <div class="col-10 text-left bg-secondary text-light p-4">
-        <h1>Tableau d'Amortissement de <?=$resultat['marchandise'] ?></h1> 
+        <h1>Tableau d'Amortissement de <?=$resultat['nom_operation'] ?></h1> 
   </div>
        <?php
    }else {
        ?>
        <div class="col-12 text-left bg-secondary text-light p-4">
-        <h1>Tableau d'Amortissement de <?=$resultat['marchandise'] ?></h1> 
+        <h1>Tableau d'Amortissement de <?=$resultat['nom_operation'] ?></h1> 
   </div>
        <?php
    }

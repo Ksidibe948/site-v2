@@ -313,8 +313,8 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
    <div class="col-lg-6 col-11">       
    <div class="row ">
     <div class="col-lg-4 ">
-        <div class="card w-100   ml-4 mt-2 shadow-lg bg-light pb-5  mb-2"  >  
-        <div class="card-title text-center ">
+        <div class="card text-center w-100  mt-5  ml-4 mt-2 shadow-lg bg-light   mb-2"  >  
+   
         <a  class="nav-link text-secondary bg-light " href="index.php?page=vente_marchandise&id=<?=$_SESSION['id'] ?>">              
           <p style='  font-size:1.5rem;'>Ventes des <br> Marchandises</p> <hr>
           <svg width="5em" color='#A41FDE ' height="5em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -325,12 +325,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
           <circle cx="3.5" cy="10.5" r=".5"/>
         </svg>
         </a> 
-        </div>
+     
     </div>
     </div>
     <div class="col-lg-4  ">
-        <div class="card w-100  ml-4 mt-2 shadow-lg bg-light pb-5  mb-2"  >
-        <div class="card-title text-center ">
+        <div class="card text-center w-100  mt-5 ml-4 mt-2 shadow-lg bg-light   mb-2"  >
+   
         <a  class="nav-link text-secondary bg-light" href="index.php?page=factureachatmatiere_premiere&id=<?=$_SESSION['id'] ?>"> 
           <p style='  font-size:1.5rem'>Ventes des <br> Produits</p> <hr>
           <svg width="5em" color='#A41FDE ' height="5em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -341,12 +341,12 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
           <circle cx="3.5" cy="10.5" r=".5"/>
         </svg>
           </a> 
-        </div>
+  
     </div>
     </div>
     <div class="col-lg-4  ">
-        <div class="card w-100  ml-4 mt-2 shadow-lg bg-light pb-5  mb-2"  >
-        <div class="card-title text-center ">
+        <div class="card text-center w-100  mt-5 ml-4 mt-2 shadow-lg bg-light   mb-2"  >
+   
         <a  class="nav-link text-secondary bg-light"  href="index.php?page=Cessions&id=<?=$_SESSION['id'] ?>"> 
           <p style='  font-size:1.5rem'>Cessions Immobilisations</p> <hr>
           <svg width="5em" color='#A41FDE ' height="5em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -357,7 +357,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
           <circle cx="3.5" cy="10.5" r=".5"/>
         </svg>
           </a> 
-        </div>
+      
     </div>
     </div>
      </div>

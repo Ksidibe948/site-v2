@@ -1,14 +1,6 @@
 
  <!-- la partie de connexion -->
- <?php
- if (isset($_GET['id'])) {
-    $getid=$_GET['id'];
-    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-    $select=$bdd->prepare('SELECT * FROM capitals WHERE id=?');
-    $select->execute(array( $getid));
-    $donnees=$select->fetch();
- }
- ?>
+
  <?php
   session_start();
   if ( isset($_SESSION['id']))
@@ -27,6 +19,15 @@
   }
   
 ?>
+ <?php
+ 
+   
+    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
+    $select=$bdd->prepare('SELECT * FROM capitals WHERE id_entreprise=?');
+    $select->execute(array( $_SESSION['id']));
+    $donnees=$select->fetch();
+
+ ?>
 <?php
 if (isset($_GET['id'])) {
     $getid=$_GET['id'];
@@ -45,12 +46,12 @@ if (isset($_GET['id'])) {
               $actions= $_POST["nombre_d'action"];
              
             
-             $req=$bdd->prepare('UPDATE capitals SET capital=? WHERE id=?');
-             $req->execute(array($capital,$getid));
+             $req=$bdd->prepare('UPDATE capitals SET capital=? WHERE id_entreprise=?');
+             $req->execute(array($capital,$_SESSION['id']));
              header('Location:index.php?page=capital&id='.$_SESSION['id']);
 
-             $req=$bdd->prepare('UPDATE capitals SET actions=? WHERE id=?');
-             $req->execute(array($actions,$getid));
+             $req=$bdd->prepare('UPDATE capitals SET actions=? WHERE id_entreprise=?');
+             $req->execute(array($actions,$_SESSION['id']));
              header('Location:index.php?page=capital&id='.$_SESSION['id']);
       }                 
               
@@ -60,7 +61,7 @@ if (isset($_GET['id'])) {
 
 <?php
    $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
-   $nombre=$bdd->query('SELECT * FROM capitals ORDER BY id DESC');
+   $nombre=$bdd->query('SELECT * FROM capitals ORDER BY id_entreprise DESC');
    $count=$nombre->rowcount();
    ?>
 

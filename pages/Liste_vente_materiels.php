@@ -406,12 +406,6 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
 </svg>
  Factures Ventes de materiels <span style='color:green'> ( <?=$vente_materiels?>)</span>
   </a>
-  <a style='font-size:1.3rem' class="nav-link  text-info "  href="index.php?page=Listes_des_vente_marchandise&id=<?=$_SESSION['id'] ?>">
-  <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-  </svg>
-     Ajouter une nouvelle <br> facture de vente materiel 
-  </a>
   <hr>
   <a  class="nav-link   " style="font-size:1.1rem; "  href="index.php?page=vente_marchandise&id=<?=$_SESSION['id'] ?>">              
 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -535,6 +529,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
         </div>
     </div>
     </div>
+
      <?php
         while($resultat=$listeachat_marchandise->fetch())
         {
@@ -544,7 +539,7 @@ $bdd=new PDO('mysql:host=localhost; dbname=w&k;charset=utf8','root','');
                 if ($resultat['quantiteS']>0) {
                   ?>
                     <a class="nav-link ligh text-secondary" href="index.php?page=nouvellefacturevente_materiel&id=<?=$resultat['id'] ?>">
-                   <div class="card w-100 shadow-lg  p-4 " >
+                   <div class="card w-100 shadow-lg   " >
                     <div class="card-title mt-2 " style=" border-radius: 10px;">
                     <div class="row">
                      <div class="col-12 text-center">

@@ -17,14 +17,11 @@
   }
 ?>
 <?php
- if (isset($_GET['id'] ) ) 
- {
-   $getid=$_GET['id'];
-    {
-        $req=$bdd->prepare('DELETE  FROM capitals WHERE id=?');
-         $req->execute(array($getid));
+ 
+        $req=$bdd->prepare('DELETE  FROM capitals WHERE id_entreprise=?');
+         $req->execute(array($_SESSION['id']));
 
-    }
+ 
     header('Location:index.php?page=capital&id='.$_SESSION['id']);
- }
+
 ?>
